@@ -1,5 +1,5 @@
 #!/bin/bash
-set -e
+set -euxo
 trap 'echo "\"${BASH_COMMAND}\" command filed with exit code $?."' EXIT
 
 function find_device()
@@ -18,7 +18,7 @@ function find_device()
 
 docker_args=(run --rm)
 [[ -z "${SKIP_PROGRAMMING}" ]] && docker_args+=( $(find_device "ST-LINK") )
-docker_args+=(-v $(pwd):/workdir)
+docker_args+=(-v "$(pwd):/workdir")
 docker_args+=(archont94/mutable-env:latest)
 docker_args+=(bash -c "cd /workdir && $*")
 docker "${docker_args[@]}"
